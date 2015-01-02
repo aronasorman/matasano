@@ -1,6 +1,8 @@
 package matasano
 
 import (
+	"encoding/hex"
+	"strings"
 	"testing"
 )
 
@@ -14,7 +16,26 @@ func TestChallenge1(t *testing.T) {
 
 func TestChallenge2(t *testing.T) {
 	expected := "746865206b696420646f6e277420706c6179"
-	if x := Xor("1c0111001f010100061a024b53535009181c", "686974207468652062756c6c277320657965"); x != expected {
+	if x, _ := Xor("1c0111001f010100061a024b53535009181c", "686974207468652062756c6c277320657965"); x != expected {
 		t.Error(x)
+	}
+}
+
+func TestChallenge3(t *testing.T) {
+	teststr := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+
+	for _, letter := range "1234567890abcdefghijklmnopqrstuvwxyz" {
+		chrkey := hex.EncodeToString([]byte(string(letter)))
+		key := strings.Repeat(chrkey, len(teststr)*2)
+		xored, err := Xor(teststr, key)
+		if err != nil {
+			t.Error(err)
+		}
+
+		out, err := hex.DecodeString(xored)
+		if err != nil {
+			t.Error(err)
+		}
+		println(string(out))
 	}
 }

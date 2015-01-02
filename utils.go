@@ -6,9 +6,15 @@ import (
 	"encoding/hex"
 )
 
-func Xor(str1, str2 string) string {
-	str1base10, _ := hex.DecodeString(str1)
+func Xor(str1, str2 string) (string, error) {
+	str1base10, err := hex.DecodeString(str1)
+	if err != nil {
+		return "", err
+	}
 	str2base10, _ := hex.DecodeString(str2)
+	if err != nil {
+		return "", err
+	}
 
 	var out bytes.Buffer
 	for i, _ := range str1base10 {
@@ -16,7 +22,7 @@ func Xor(str1, str2 string) string {
 		out.WriteByte(byte(b))
 	}
 
-	return hex.EncodeToString(out.Bytes())
+	return hex.EncodeToString(out.Bytes()), nil
 }
 
 func ToBase64(base10 []byte) (string, error) {
