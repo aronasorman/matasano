@@ -25,15 +25,14 @@ func Dict() [][]byte {
 	return filteredwords
 }
 
-func ScoreText(t []byte, dict [][]byte) int {
-	var score int
+func ScoreText(t []byte, dict [][]byte) (score int) {
 	for _, d := range dict {
 		if found := bytes.Index(t, d); found != -1 {
 			score++
 		}
 	}
 
-	return score
+	return
 }
 
 func XorBytes(b1, b2 []byte) ([]byte, error) {
