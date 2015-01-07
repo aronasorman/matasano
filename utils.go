@@ -13,7 +13,16 @@ func Dict() [][]byte {
 		panic(err)
 	}
 
-	return bytes.Split(b, []byte("\n"))
+	allwords := bytes.Split(b, []byte("\n"))
+	filteredwords := make([][]byte, 1000)
+
+	for _, word := range allwords {
+		if len(word) >= 4 {
+			filteredwords = append(filteredwords, word)
+		}
+	}
+
+	return filteredwords
 }
 
 func ScoreText(t []byte, dict [][]byte) int {
