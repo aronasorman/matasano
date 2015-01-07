@@ -91,5 +91,14 @@ func TestChallenge4(t *testing.T) {
 		}
 
 	}
-	fmt.Printf("Got %s with score %d\n", highest, highestscore)
+	fmt.Printf("Set 1 Challenge 4:Got '%s' with score %d\n", highest, highestscore)
+}
+
+func BenchmarkScoreText(b *testing.B) {
+	dict := Dict()
+	t := []byte("cOOKINGmcSLIKEAPOUNDOFBACON")
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		ScoreText(t, dict)
+	}
 }
