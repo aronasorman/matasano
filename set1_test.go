@@ -2,6 +2,7 @@ package matasano
 
 import (
 	"encoding/hex"
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -24,6 +25,11 @@ func TestChallenge2(t *testing.T) {
 func TestChallenge3(t *testing.T) {
 	teststr := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
 
+	var highest []byte
+	var highestscore int
+
+	dict := Dict()
+
 	for _, letter := range "1234567890abcdefghijklmnopqrstuvwxyz" {
 		chrkey := hex.EncodeToString([]byte(string(letter)))
 		key := strings.Repeat(chrkey, len(teststr)*2)
@@ -36,6 +42,12 @@ func TestChallenge3(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		println(string(out))
+
+		if score := ScoreText(out, dict); score > highestscore {
+			highest = out
+			highestscore = score
+		}
 	}
+
+	fmt.Printf("Got %s with score %d\n", highest, highestscore)
 }

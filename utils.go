@@ -4,7 +4,28 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/hex"
+	"io/ioutil"
 )
+
+func Dict() [][]byte {
+	b, err := ioutil.ReadFile("/etc/dictionaries-common/words")
+	if err != nil {
+		panic(err)
+	}
+
+	return bytes.Split(b, []byte("\n"))
+}
+
+func ScoreText(t []byte, dict [][]byte) int {
+	var score int
+	for _, d := range dict {
+		if found := bytes.Index(t, d); found != -1 {
+			score++
+		}
+	}
+
+	return score
+}
 
 func Xor(str1, str2 string) (string, error) {
 	str1base10, err := hex.DecodeString(str1)
