@@ -27,23 +27,29 @@ func ScoreText(t []byte, dict [][]byte) int {
 	return score
 }
 
+func XorBytes(b1, b2 []byte) ([]byte, error) {
+	var out bytes.Buffer
+	for i, _ := range b1 {
+		b := int(b1[i]) ^ int(b2[i])
+		out.WriteByte(byte(b))
+	}
+
+	return out.Bytes(), nil
+}
+
 func Xor(str1, str2 string) (string, error) {
 	str1base10, err := hex.DecodeString(str1)
 	if err != nil {
 		return "", err
 	}
-	str2base10, _ := hex.DecodeString(str2)
+	str2base10, err := hex.DecodeString(str2)
 	if err != nil {
 		return "", err
 	}
 
-	var out bytes.Buffer
-	for i, _ := range str1base10 {
-		b := int(str1base10[i]) ^ int(str2base10[i])
-		out.WriteByte(byte(b))
-	}
+	out, err := XorBytes(str1base10, str2base10)
 
-	return hex.EncodeToString(out.Bytes()), nil
+	return hex.EncodeToString(out), nil
 }
 
 func ToBase64(base10 []byte) (string, error) {

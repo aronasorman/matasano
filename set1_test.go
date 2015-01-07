@@ -1,8 +1,10 @@
 package matasano
 
 import (
+	"bytes"
 	"encoding/hex"
 	"fmt"
+	"io/ioutil"
 	"strings"
 	"testing"
 )
@@ -49,5 +51,45 @@ func TestChallenge3(t *testing.T) {
 		}
 	}
 
+	fmt.Printf("Set 1 Challenge 3: Got %s with score %d\n", highest, highestscore)
+}
+
+func TestChallenge4(t *testing.T) {
+	filecontent, err := ioutil.ReadFile("4.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	filestrings := bytes.Split(filecontent, []byte("\n"))
+	dict := Dict()
+
+	var highestscore int
+	var highest string
+	strb := make([]byte, 120)
+
+	// pregenerate the keys so we don't have to generate them every time
+	keyseeds := []byte("1234567890abcdefghijklmnopqrstuvwxyz")
+	keys := make([][]byte, len(keyseeds))
+	for i, letter := range keyseeds {
+		keys[i] = bytes.Repeat([]byte{letter}, len(filestrings[0]))
+	}
+
+	for _, str := range filestrings {
+		for _, key := range keys {
+
+			n, _ := hex.Decode(strb, str)
+
+			xored, err := XorBytes(strb[:n], key)
+			if err != nil {
+				t.Error(err)
+			}
+
+			if score := ScoreText(xored, dict); score > highestscore {
+				highest = string(xored)
+				highestscore = score
+			}
+		}
+
+	}
 	fmt.Printf("Got %s with score %d\n", highest, highestscore)
 }
