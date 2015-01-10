@@ -94,6 +94,9 @@ func TestChallenge4(t *testing.T) {
 	fmt.Printf("Set 1 Challenge 4:Got '%s' with score %d\n", highest, highestscore)
 }
 
+func TestChallenge5(t *testing.T) {
+}
+
 func BenchmarkScoreText(b *testing.B) {
 	dict := Dict()
 	t := []byte("cOOKINGmcSLIKEAPOUNDOFBACON")
