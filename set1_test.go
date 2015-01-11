@@ -108,6 +108,27 @@ func TestChallenge5(t *testing.T) {
 	}
 }
 
+func TestSetBitCount(t *testing.T) {
+	testnum := byte(9)
+	if numbits := SetBitCount(testnum); numbits != 2 {
+		t.Errorf("Got %d set bits; should've gotten 2!", numbits)
+	}
+}
+
+func TestHammingDistance(t *testing.T) {
+	text1 := []byte("this is a test")
+	text2 := []byte("wokka wokka!!!")
+
+	diff, err := HammingDistance(text1, text2)
+	if err != nil {
+		panic(err)
+	}
+
+	if diff != 37 {
+		t.Errorf("Distance should be 37! Got %d", diff)
+	}
+}
+
 func BenchmarkScoreText(b *testing.B) {
 	dict := Dict()
 	t := []byte("cOOKINGmcSLIKEAPOUNDOFBACON")

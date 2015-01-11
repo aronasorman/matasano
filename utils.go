@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/hex"
+	"errors"
 	"io/ioutil"
 	"math"
 )
@@ -75,4 +76,29 @@ func Hex2Base64(base16str string) (string, error) {
 	} else {
 		return ToBase64(base10)
 	}
+}
+
+func SetBitCount(b byte) (bits int) {
+	// Brian Kernighan's algorithm for counting set bits
+	for i := int(b); i != 0; i = i & (i - 1) {
+		bits++
+	}
+	return
+}
+
+func HammingDistance(b1, b2 []byte) (distance int, err error) {
+	if len(b1) != len(b2) {
+		return 0, errors.New("b1 and b2 should be equal length!")
+	}
+
+	xored, err := XorBytes(b1, b2)
+	if err != nil {
+		return 0, err
+	}
+
+	for _, b := range xored {
+		distance += SetBitCount(b)
+	}
+
+	return
 }
