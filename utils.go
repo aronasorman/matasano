@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"io/ioutil"
+	"math"
 )
 
 func Dict() [][]byte {
@@ -27,10 +28,11 @@ func ScoreText(t []byte, dict [][]byte) (score int) {
 	return
 }
 
-func XorBytes(b1, b2 []byte) ([]byte, error) {
+func XorBytes(plaintext, key []byte) ([]byte, error) {
 	var out bytes.Buffer
-	for i, _ := range b1 {
-		b := int(b1[i]) ^ int(b2[i])
+	for i, _ := range plaintext {
+		keyindex := int(math.Mod(float64(i), float64(len(key))))
+		b := int(plaintext[i]) ^ int(key[keyindex])
 		out.WriteByte(byte(b))
 	}
 
