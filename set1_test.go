@@ -95,6 +95,17 @@ func TestChallenge4(t *testing.T) {
 }
 
 func TestChallenge5(t *testing.T) {
+	key := []byte("ICE")
+	plaintext1 := []byte("Burning 'em, if you ain't quick and nimble")
+	expected, err := hex.DecodeString("0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272a282b2f20")
+	enc, err := XorBytes(plaintext1, key)
+	if err != nil {
+		panic(err)
+	}
+
+	if string(enc) != string(expected) {
+		t.Errorf("%s not equal to %s", string(enc), string(expected))
+	}
 }
 
 func BenchmarkScoreText(b *testing.B) {
