@@ -2,8 +2,10 @@ package matasano
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"github.com/oleiade/lane"
 	"io/ioutil"
 	"strings"
 	"testing"
@@ -106,6 +108,35 @@ func TestChallenge5(t *testing.T) {
 	if string(enc) != string(expected) {
 		t.Errorf("%s not equal to %s", string(enc), string(expected))
 	}
+}
+
+func TestChallenge6(t *testing.T) {
+	rawdata, err := ioutil.ReadFile("6.txt")
+	data, err := base64.StdEncoding.DecodeString(string(rawdata))
+	if err != nil {
+		panic(err)
+	}
+
+	pq := lane.NewPQueue(lane.MINPQ)
+
+	keysize := 2
+	// find the right keysize
+	for ; keysize <= 40; keysize++ {
+		n := keysize
+		block1 := data[:n]
+		block2 := data[n : n*2]
+
+		dist, err := HammingDistance(block1, block2)
+		if err != nil {
+			panic(err)
+		}
+
+		pq.Push(keysize, dist/keysize)
+	}
+
+	k, dist := pq.Head()
+
+	fmt.Printf("Top keysize: %d distance: %d\n", k, dist)
 }
 
 func TestSetBitCount(t *testing.T) {
