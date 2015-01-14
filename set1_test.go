@@ -112,6 +112,16 @@ func TestChallenge5(t *testing.T) {
 
 func TestChallenge6(t *testing.T) {
 	rawdata, err := ioutil.ReadFile("6.txt")
+
+	// remove the newlines first before decrypting
+	rawdata = bytes.Map(func(r rune) rune {
+		if r == rune('\n') {
+			return -1
+		} else {
+			return r
+		}
+	}, rawdata)
+
 	data, err := base64.StdEncoding.DecodeString(string(rawdata))
 	if err != nil {
 		panic(err)
