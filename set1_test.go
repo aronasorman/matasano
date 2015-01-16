@@ -156,6 +156,17 @@ func TestSetBitCount(t *testing.T) {
 	}
 }
 
+func TestSplitBySize(t *testing.T) {
+	sample := []byte("123456789")
+	blocksize := 4
+
+	blocks := SplitBySize(sample, blocksize)
+
+	if len(blocks) != 3 {
+		t.Errorf("Expected # of blocks is 3; got %d", len(blocks))
+	}
+}
+
 func TestHammingDistance(t *testing.T) {
 	text1 := []byte("this is a test")
 	text2 := []byte("wokka wokka!!!")

@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
+	"io"
 	"io/ioutil"
 	"math"
 )
@@ -83,6 +84,26 @@ func SetBitCount(b byte) (bits int) {
 	for i := int(b); i != 0; i = i & (i - 1) {
 		bits++
 	}
+	return
+}
+
+func SplitBySize(b []byte, blocksize int) (blocks [][]byte) {
+	blocks = [][]byte{}
+
+	buf := bytes.NewBuffer(b)
+	for {
+		block := make([]byte, blocksize)
+		n, err := buf.Read(block)
+		if err == io.EOF {
+			break
+		}
+
+		blocks = append(blocks, block)
+		if n < len(block) {
+			break
+		}
+	}
+
 	return
 }
 
