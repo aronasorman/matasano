@@ -129,9 +129,8 @@ func TestChallenge6(t *testing.T) {
 
 	pq := lane.NewPQueue(lane.MINPQ)
 
-	keysize := 2
 	// find the right keysize
-	for ; keysize <= 40; keysize++ {
+	for keysize := 2; keysize <= 40; keysize++ {
 		n := keysize
 		block1 := data[:n]
 		block2 := data[n : n*2]
