@@ -143,9 +143,24 @@ func TestChallenge6(t *testing.T) {
 		pq.Push(keysize, dist/keysize)
 	}
 
-	k, dist := pq.Head()
+	topn := 3
+	for n := 0; n < topn; n++ {
 
-	fmt.Printf("Top keysize: %d distance: %d\n", k, dist)
+		keysize, dist := pq.Pop()
+		keysizeint := keysize.(int)
+
+		fmt.Printf("Top keysize: %d distance: %d\n", keysize, dist)
+
+		blocks := SplitBySize(data, keysizeint)
+		transposedblocks := make([][]byte, keysizeint)
+
+		for ti := range transposedblocks {
+			transposedblocks[ti] = make([]byte, len(blocks))
+			for bi, block := range blocks {
+				transposedblocks[ti][bi] = block[ti]
+			}
+		}
+	}
 }
 
 func TestSetBitCount(t *testing.T) {
